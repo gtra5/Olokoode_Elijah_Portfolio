@@ -88,7 +88,7 @@ function App() {
   const downloadCV = () => {
   const link = document.createElement("a")
   link.href = "/Olokode Elijah_resume.docx"
-  link.download = "/Olokode Elijah_resume.docx"
+  link.download = "Olokode Elijah_resume.docx"
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
