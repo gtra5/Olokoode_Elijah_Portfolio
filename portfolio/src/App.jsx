@@ -1,5 +1,5 @@
 import { useState, useEffect} from "react";
-import img1 from "./assets/elijah (2).png";
+import img1 from "./assets/tejah.jpeg";
 import img2 from "./assets/OE.png";
 import { motion } from "framer-motion";
 import ZigZagLine from "./component/zigzag";
@@ -383,7 +383,7 @@ const handlScroll = (id) => {
                     width="500"
                     height="500"
                     clipPath="url(#curvedClip)"
-                    preserveAspectRatio="xMidYMid slice"
+                    preserveAspectRatio=""
                   />
                 </svg>
               </motion.div>
