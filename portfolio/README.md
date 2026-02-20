@@ -1,3 +1,17 @@
+# Portfolio Project
+
+This project is a personal portfolio website built using React and Vite. It showcases my work, skills, and experience in a modern, responsive, and interactive format. The site features custom components, smooth animations, and a clean design to provide visitors with an engaging user experience.
+
+## Technologies Used
+
+- **React**: For building the user interface and managing component state.
+- **Vite**: For fast development, hot module replacement (HMR), and optimized builds.
+- **JavaScript (JSX)**: For writing component logic and structure.
+- **CSS**: For styling and layout, including custom animations.
+- **ESLint**: For maintaining code quality and consistency.
+
+Additional libraries and tools may be included as the project evolves.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
