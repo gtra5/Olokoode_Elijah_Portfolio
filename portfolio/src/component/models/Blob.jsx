@@ -7,19 +7,20 @@ function BlobMesh() {
   const rotationRef = useRef();
   const { viewport, size } = useThree();
 
-  // Use pixel width to pick a feel-good scale bracket
+  // Slightly smaller on-screen footprint = fewer shaded pixels for the transmission pass.
   const scale = useMemo(() => {
-    if (size.width < 480) return viewport.width * 0.42;        // mobile
-    if (size.width < 768) return viewport.width * 0.35;        // tablet
-    if (size.width < 1280) return viewport.width * 0.28;       // laptop
-    return Math.min(viewport.width * 0.22, 2.2);               // desktop cap
+    if (size.width < 480) return viewport.width * 0.36;
+    if (size.width < 768) return viewport.width * 0.3;
+    if (size.width < 1280) return viewport.width * 0.24;
+    return Math.min(viewport.width * 0.19, 1.95);
   }, [size.width, viewport.width]);
 
-  // Lighter shader work on small screens to avoid jank while keeping the same look on desktop
+  // MeshTransmissionMaterial cost scales with samples × resolution; keep desktop usable, mobile smooth.
   const transmissionQuality = useMemo(() => {
-    if (size.width < 480) return { samples: 2, resolution: 256, chromaticAberration: 0.6 };
-    if (size.width < 768) return { samples: 3, resolution: 384, chromaticAberration: 0.85 };
-    return { samples: 4, resolution: 512, chromaticAberration: 1.0 };
+    if (size.width < 480) return { samples: 2, resolution: 224, chromaticAberration: 0.55 };
+    if (size.width < 768) return { samples: 2, resolution: 320, chromaticAberration: 0.75 };
+    if (size.width < 1280) return { samples: 3, resolution: 384, chromaticAberration: 0.9 };
+    return { samples: 3, resolution: 448, chromaticAberration: 0.95 };
   }, [size.width]);
 
   useFrame((_, delta) => {

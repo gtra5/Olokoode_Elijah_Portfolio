@@ -14,6 +14,19 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HomePage() {
   const rootRef = useRef(null);
   const [mountWebGL, setMountWebGL] = useState(false);
+  const [heroInView, setHeroInView] = useState(true);
+
+  // Pause the WebGL layer when the hero scrolls away so the rest of the page does not pay for transmission + env every frame.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver(
+      ([e]) => setHeroInView(e.isIntersecting && e.intersectionRatio > 0),
+      { root: null, threshold: [0, 0.02, 0.1] },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // Defer WebGL until after first paint / idle so hero text and CSS are not competing with GLB + shader compile.
   useEffect(() => {
@@ -81,12 +94,19 @@ export default function HomePage() {
   return (
     <section ref={rootRef} className="relative h-screen w-full overflow-hidden">
 
-      {/* Canvas: mounted after idle so initial load stays responsive; dpr capped to limit GPU fill cost */}
-      {mountWebGL && (
+      {/* Canvas: idle mount + only while hero is in view; adaptive DPR + perf budget to avoid sustained frame drops */}
+      {mountWebGL && heroInView && (
         <Canvas
           camera={{ position: [0, 0, 5], fov: 50 }}
           className="!fixed inset-0 !z-0"
-          dpr={[1, Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 2)]}
+          dpr={[1, Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 1.75)]}
+          performance={{ min: 0.5 }}
+          gl={{
+            powerPreference: "high-performance",
+            antialias: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
+            stencil: false,
+            depth: true,
+          }}
         >
           <ambientLight intensity={0.5} />
           <directionalLight intensity={2} position={[0, 2, 3]} />
@@ -99,7 +119,7 @@ export default function HomePage() {
               </Center>
             </Bounds>
           </Suspense>
-          <OrbitControls enableZoom={false} enablePan={false} />
+          <OrbitControls enableZoom={false} enablePan={false} enableDamping={false} />
         </Canvas>
       )}
 
