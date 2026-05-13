@@ -1,4 +1,4 @@
-import React, { useRef, Suspense, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import { useGLTF, MeshTransmissionMaterial } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 
@@ -46,9 +46,7 @@ function BlobMesh() {
 export default function Blob(props) {
   return (
     <group {...props} dispose={null}>
-      <Suspense fallback={null}>
-        <BlobMesh />
-      </Suspense>
+      <BlobMesh />
     </group>
   );
 }

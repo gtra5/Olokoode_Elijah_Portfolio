@@ -91,13 +91,14 @@ export default function HomePage() {
           <ambientLight intensity={0.5} />
           <directionalLight intensity={2} position={[0, 2, 3]} />
           <Environment preset="city" />
-          <Bounds fit clip observe margin={1.2}>
-            <Center>
-              <Suspense fallback={null}>
+          {/* One Suspense around Bounds + Blob: if Bounds runs with no mesh, "fit" can blow up and the blob overtakes the screen */}
+          <Suspense fallback={null}>
+            <Bounds fit clip observe margin={1.2}>
+              <Center>
                 <Blob />
-              </Suspense>
-            </Center>
-          </Bounds>
+              </Center>
+            </Bounds>
+          </Suspense>
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       )}
