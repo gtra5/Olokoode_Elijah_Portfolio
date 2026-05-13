@@ -1,9 +1,10 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect, lazy, Suspense } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Blob from "../component/models/Blob";
 import { Canvas } from "@react-three/fiber";
+
+const Blob = lazy(() => import("../component/models/Blob"));
 import { OrbitControls, Center, Bounds, Environment } from "@react-three/drei";
 import AnimatedCurveB from "../component/AnimatedCurveB";
 import Header from "../component/header";
@@ -12,6 +13,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HomePage() {
   const rootRef = useRef(null);
+  const [mountWebGL, setMountWebGL] = useState(false);
+
+  // Defer WebGL until after first paint / idle so hero text and CSS are not competing with GLB + shader compile.
+  useEffect(() => {
+    let cancelled = false;
+    const start = () => {
+      if (!cancelled) setMountWebGL(true);
+    };
+    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(start, { timeout: 1200 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+    const t = window.setTimeout(start, 200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
+  }, []);
 
   useGSAP(
     () => {
@@ -59,23 +81,28 @@ export default function HomePage() {
   return (
     <section ref={rootRef} className="relative h-screen w-full overflow-hidden">
 
-      {/* Canvas */}
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
-        className="!fixed inset-0 !z-0"
-      >
-        <ambientLight intensity={0.5} />
-        <directionalLight intensity={2} position={[0, 2, 3]} />
-        <Environment preset="city" />
-        <Bounds fit clip observe margin={1.2}>
-          <Center>
-            <Blob />
-          </Center>
-        </Bounds>
-        <OrbitControls enableZoom={false} enablePan={false} />
-      </Canvas>
+      {/* Canvas: mounted after idle so initial load stays responsive; dpr capped to limit GPU fill cost */}
+      {mountWebGL && (
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 50 }}
+          className="!fixed inset-0 !z-0"
+          dpr={[1, Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 2)]}
+        >
+          <ambientLight intensity={0.5} />
+          <directionalLight intensity={2} position={[0, 2, 3]} />
+          <Environment preset="city" />
+          <Bounds fit clip observe margin={1.2}>
+            <Center>
+              <Suspense fallback={null}>
+                <Blob />
+              </Suspense>
+            </Center>
+          </Bounds>
+          <OrbitControls enableZoom={false} enablePan={false} />
+        </Canvas>
+      )}
 
-      <AnimatedCurveB className="absolute inset-0 z-[-1] w-full h-full text-black pointer-events-none opacity-[0.28]" />
+      <AnimatedCurveB className="absolute inset-0 z-[-1] w-full h-full text-black pointer-events-none opacity-30" />
 
       <Header />
 
