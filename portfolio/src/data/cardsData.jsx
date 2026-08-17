@@ -1,8 +1,8 @@
-import Img1 from "../assets/food-delivery.png";
-import Img2 from "../assets/travelstore.png";
-import Img3 from "../assets/Untitled-2 (4).png";
+import Img1 from "../assets/advert2.jpeg";
+import Img2 from "../assets/travelstore.png.jpeg";
+import Img3 from "../assets/movies.jpeg";
 import Img4 from "../assets/glazer.png";
-import img5 from "../assets/insurepro.png";
+import img5 from "../assets/insurepro.png.jpeg";
 export const cards = [
   { about: "About Me", text: "01" },
   { about: "Tech Stack", text: "02" },
@@ -20,7 +20,7 @@ export const projects = [
     logoColor: "#fff",
     stack: ["React.js", "Tailwind CSS"],
     desc: "A fully responsive food delivery platform enabling users to browse restaurant menus, add items to cart, and complete orders. Features secure Firebase Authentication, protected private routes, and a modular component architecture — built mobile-first for a seamless experience across all devices.",
-    liveUrl: "https://finest-diners.vercel.app/",
+    liveUrl: "https://finest-diners-2-rihd.vercel.app/",
     image: Img1,
   },
   {
