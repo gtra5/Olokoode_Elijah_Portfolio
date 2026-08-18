@@ -18,9 +18,10 @@ export const projects = [
     tagBg: "#e8e2fa",
     gradient: "linear-gradient(135deg, #c8b8ff 0%, #7c5cbf 100%)",
     logoColor: "#fff",
-    stack: ["React.js", "Tailwind CSS"],
-    desc: "A fully responsive food delivery platform enabling users to browse restaurant menus, add items to cart, and complete orders. Features secure Firebase Authentication, protected private routes, and a modular component architecture — built mobile-first for a seamless experience across all devices.",
+    stack: ["React 19", "Vite 8", "Tailwind CSS 4", "Framer Motion", "Socket.IO"],
+    desc: "A sophisticated full-featured food delivery platform with real-time GPS tracking, scroll-scrubbed hero videos, and smart cart management. Features JWT authentication, Socket.IO live updates, Paystack payment integration, and reverse geocoding — built with React 19 + Vite 8 for maximum performance and modern development practices.",
     liveUrl: "https://finest-diners-2-rihd.vercel.app/",
+    githubUrl: "https://github.com/gtra5/finest-diners-2.git",
     image: Img1,
   },
   {
